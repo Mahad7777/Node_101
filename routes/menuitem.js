@@ -17,6 +17,7 @@ menuitem.post("/", async (req,res)=>{
 
 menuitem.get("/", async(req,res)=>{
     const allItems = await MenuItem.find()
+    console.log('Data fetched! ')
     res.send(allItems)
 })
 
