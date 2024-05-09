@@ -2,7 +2,6 @@ const express = require('express')
 const person = express.Router()
 
 const Person = require('./../models/person')
-const menuitem = require('./menuitem')
 
 person.post('/', async (req,res)=>{
         try{
@@ -22,7 +21,7 @@ person.post('/', async (req,res)=>{
         }
     })
 
-person.get('/ ', async (req, res) => {
+person.get('/', async (req, res) => {
     try {
     
         const alldata = await Person.find();
