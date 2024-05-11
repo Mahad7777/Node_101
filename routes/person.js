@@ -19,9 +19,9 @@ person.post('/signup', async (req,res)=>{
                 username : response.name
 
             }
-            console.log(JSON.stringify(payload))
+            // console.log(JSON.stringify(payload))
             const token = generateToken(payload)
-            console.log("Token: ", token)
+            // console.log("Token: ", token)
             res.json({response:response, token: token})
     
         }catch(err){
