@@ -30,7 +30,7 @@ const menuitemRoutes = require('./routes/menuitem')
 app.use('/menuitem', menuitemRoutes)
 
 const personRoutes = require('./routes/person')
-app.use('/person',middlewareAuth, personRoutes)
+app.use('/person',personRoutes)
 
 
 app.listen(3001,()=>{
