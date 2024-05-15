@@ -3,10 +3,22 @@ const express = require('express')
 const app = express()
 const db = require("./db")
 const passport = require('./auth')
+const cors = require('cors');
+
+// Initialize CORS middleware
+const corsOptions = {
+    credentials: true,
+    origin: 'http://localhost:5173'
+};
+const corsMiddleware = cors(corsOptions);
+
+// Use CORS middleware in the router
+app.use(corsMiddleware);
 
 // to convert the json data to an object
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+
 
 //middleware function
 // const middle = (req,res,next)=>{
@@ -15,14 +27,15 @@ app.use(bodyParser.json())
 // }
 // app.use(middle)
 
-app.use(passport.initialize())
-const middlewareAuth = passport.authenticate('local',{session:false})
+// app.use(passport.initialize())
+// const middlewareAuth = passport.authenticate('local',{session:false})
 
-app.get('/', (req,res)=>{
-    res.json("Welcome to learning node.js")
-})
+
 
 // import router files
+const mainroute = require('./routes/main')
+app.use('/', mainroute)
+
 const taskRoutes = require('./routes/tasks')
 app.use('/tasks', taskRoutes)
 

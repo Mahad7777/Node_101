@@ -6,6 +6,12 @@ const Person = require('./../models/person')
 person.post('/signup', async (req,res)=>{
         try{
             const data = req.body
+            if (!data.name){
+                return res.json({error: "Name is mandatory! "})
+            }
+            if (!data.password){
+                return res.json({error: "Password  is mandatory! "})
+            }
     
             // populate the new person with the sent data
             const newperson = new Person(data)
@@ -14,15 +20,15 @@ person.post('/signup', async (req,res)=>{
             const response = await newperson.save()
             console.log("Data saved! ")
 
-            const payload = {
-                id : response.id,
-                username : response.name
+            // const payload = {
+            //     id : response.id,
+            //     username : response.name
 
-            }
-            // console.log(JSON.stringify(payload))
-            const token = generateToken(payload)
+            // }
+            // // console.log(JSON.stringify(payload))
+            // const token = generateToken(payload)
             // console.log("Token: ", token)
-            res.json({response:response, token: token})
+            res.json({response:response})
     
         }catch(err){
             console.log(err)
@@ -32,19 +38,25 @@ person.post('/signup', async (req,res)=>{
 
 person.post('/login', async(req,res)=>{
     try{
-        const {username,password} = req.body
-    const user = await Person.findOne({name:username})
-    
-    if(!user || !(await user.comparePassword(password))){
-        return res.status(401).json({message: "Incorrect username or password! "})
-    }
 
-    const payload = {
-        id: user.id,
-        username: user.name
-    } 
-    const token =  generateToken(payload)
-    res.json({token})
+    const {username,password} = req.body
+    const user = await Person.findOne({name:username})
+
+    if(!user || !(await user.comparePassword(password))){
+        return res.status(401).json({error: "Incorrect username or password! "})
+    }else{
+        return res.status(200).json({message: "Authenticated"})
+    }
+    // if(!user || !(await user.comparePassword(password))){
+    //     return res.status(401).json({message: "Incorrect username or password! "})
+    // }
+
+    // const payload = {
+    //     id: user.id,
+    //     username: user.name
+    // } 
+    // const token =  generateToken(payload)
+    // res.json({token})
     }catch(err){
         res.status(400).json({error: err})
     }
