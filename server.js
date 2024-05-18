@@ -1,6 +1,7 @@
 
 const express = require('express')
 const app = express()
+const cookieParser = require('cookie-parser')
 const db = require("./db")
 const passport = require('./auth')
 const cors = require('cors');
@@ -16,20 +17,9 @@ const corsMiddleware = cors(corsOptions);
 app.use(corsMiddleware);
 
 // to convert the json data to an object
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
-
-
-//middleware function
-// const middle = (req,res,next)=>{
-//     console.log("Middle ware used! ")
-//     next()
-// }
-// app.use(middle)
-
-// app.use(passport.initialize())
-// const middlewareAuth = passport.authenticate('local',{session:false})
-
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.urlencoded({extended: false}))
 
 
 // import router files

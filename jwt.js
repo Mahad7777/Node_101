@@ -1,23 +1,28 @@
 const jwt = require('jsonwebtoken')
 
-const jwtMiddleware = (req,res,next)=>{ 
-    const authenctication = req.headers.authorization
-    if (!authenctication) res.status(404).json({message: "Token not found! "})
+const jwtMiddleware = (req, res, next) => {
+    const {token} = req.cookies 
 
-    const token = req.headers.authorization.split(" ")[1]   // because token is stored on the second index, first index is the name bearer
-    if (!token) return res.status(401).json({error: "Invalid token"})
-
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        req.user = decoded
-        next()
-    }catch(err){
-        res.status(401).json({error: "Error in request! "})
+    if (!token) {
+        return res.status(401).json({ message: "Token not found!" });
     }
-}
+    jwt.verify(token,process.env.JWT_SECRET,{},(err, user)=>{
+        if (err) throw err
+        res.json(user)
+    })
+    // try {
 
-const generateToken = (userdata)=>{
-    return jwt.sign(userdata,process.env.JWT_SECRET)
-}
+    // } catch (err) {
+    //     return res.status(401).json({ error: "Invalid token" });
+    // }
+};
 
-module.exports = {jwtMiddleware, generateToken}
+
+// const generateToken = (userdata)=>{
+//     jwt.sign(userdata,process.env.JWT_SECRET, {expiresIn: '1h'},(err,token)=>{
+//         if(err) throw err
+
+//     })
+// }
+
+module.exports = {jwtMiddleware}

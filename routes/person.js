@@ -1,6 +1,7 @@
 const express = require('express')
+const jwt = require('jsonwebtoken')
 const person = express.Router()
-const {jwtMiddleware, generateToken} = require('./../jwt')
+const {jwtMiddleware} = require('./../jwt')
 const Person = require('./../models/person')
 
 person.post('/signup', async (req,res)=>{
@@ -19,15 +20,6 @@ person.post('/signup', async (req,res)=>{
             // save the person to the database
             const response = await newperson.save()
             console.log("Data saved! ")
-
-            // const payload = {
-            //     id : response.id,
-            //     username : response.name
-
-            // }
-            // // console.log(JSON.stringify(payload))
-            // const token = generateToken(payload)
-            // console.log("Token: ", token)
             res.json({response:response})
     
         }catch(err){
@@ -43,20 +35,18 @@ person.post('/login', async(req,res)=>{
     const user = await Person.findOne({name:username})
 
     if(!user || !(await user.comparePassword(password))){
-        return res.status(401).json({error: "Incorrect username or password! "})
-    }else{
-        return res.status(200).json({message: "Authenticated"})
+        return res.status(401).json({message: "Incorrect username or password! "})
     }
-    // if(!user || !(await user.comparePassword(password))){
-    //     return res.status(401).json({message: "Incorrect username or password! "})
-    // }
 
-    // const payload = {
-    //     id: user.id,
-    //     username: user.name
-    // } 
-    // const token =  generateToken(payload)
-    // res.json({token})
+    const payload = {
+        id: user.id,
+        username: user.name
+    } 
+    jwt.sign(payload,process.env.JWT_SECRET, {expiresIn: '1h'},(err,token)=>{
+        if(err) throw err
+        res.cookie('token',token).json(user)
+    })
+
     }catch(err){
         res.status(400).json({error: err})
     }
