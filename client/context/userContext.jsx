@@ -5,6 +5,7 @@ export const UserContext = createContext({});
 
 const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    // const [userPresent,setUserPresent] = useState(false)
 
     const fetchUserProfile = async () => {
         try {

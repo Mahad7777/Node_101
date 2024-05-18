@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Protectedroutes } from '../utils/Protectedroutes';
 import SignupForm from './pages/signup';
 import Home from './pages/home';
 import Login from './pages/login';
@@ -14,10 +15,12 @@ const App = () => {
     <UserContextProvider>
     <Toaster position='top-center' toastOptions={{duration: 2000}}/>
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route element={<Protectedroutes/>}>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
     </UserContextProvider>
   );

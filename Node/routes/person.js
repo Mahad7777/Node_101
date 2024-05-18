@@ -35,7 +35,7 @@ person.post('/login', async(req,res)=>{
     const user = await Person.findOne({name:username})
 
     if(!user || !(await user.comparePassword(password))){
-        return res.status(401).json({message: "Incorrect username or password! "})
+        return res.status(401).json({error: "Incorrect username or password! "})
     }
 
     const payload = {

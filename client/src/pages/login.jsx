@@ -27,6 +27,7 @@ const LoginForm = () => {
                 setFormData({ username: '', password: '' }); // Reset form data
                 toast.success('Login successful!');
                 fetchUserProfile(); // Fetch user profile after successful login
+                localStorage.setItem('userAuthenticated',true)
                 navigate('/dashboard');
             }
         } catch (err) {
